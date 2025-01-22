@@ -88,48 +88,90 @@ public class Binary {
 	}
 	// OR Operation
 
+	/**
+	 * OR two binary variables.
+	 *
+	 * @param num1 The first  object
+	 * @param num2 The second  object
+	 * @return A binary variable with a value of <i>num1 OR num2</i>.
+	 */
 	public static Binary or(Binary num1, Binary num2) {
 		int maxLength = Math.max(num1.number.length(), num2.number.length());
-		StringBuilder result = new StringBuilder(maxLength);
-		String bin1 = String.format("%" + maxLength + "s", num1.number).replace(' ', '0');
-		String bin2 = String.format("%" + maxLength + "s", num2.number).replace(' ', '0');
+		StringBuilder result = new StringBuilder();
 
 		for (int i = 0; i < maxLength; i++) {
-			result.append((bin1.charAt(i) == '1' || bin2.charAt(i) == '1') ? '1' : '0');
-		}
+			char bit1 = '0';
+			if (i < num1.number.length()) {
+				bit1 = num1.number.charAt(num1.number.length() - 1 - i);
+			}
 
-		return new Binary(result.toString());
-	}
+			char bit2 = '0';
+			if (i < num2.number.length()) {
+				bit2 = num2.number.charAt(num2.number.length() - 1 - i);
+			}
 
-	//AND operation
-	public static Binary and(Binary num1, Binary num2) {
-		int maxLength = Math.max(num1.number.length(), num2.number.length());
-		StringBuilder result = new StringBuilder(maxLength);
-		String bin1 = String.format("%" + maxLength + "s", num1.number).replace(' ', '0');
-		String bin2 = String.format("%" + maxLength + "s", num2.number).replace(' ', '0');
-
-		for (int i = 0; i < maxLength; i++) {
-			result.append((bin1.charAt(i) == '1' && bin2.charAt(i) == '1') ? '1' : '0');
-		}
-
-		return new Binary(result.toString());
-	}
-
-
-	// Multiply Operation
-
-	public static Binary multiply(Binary num1, Binary num2) {
-		Binary result = new Binary("0");
-		String bin2 = new StringBuilder(num2.number).reverse().toString();
-
-		for (int i = 0; i < bin2.length(); i++) {
-			if (bin2.charAt(i) == '1') {
-				Binary shiftedNum1 = new Binary(num1.number + "0".repeat(i));
-				result = Binary.add(result, shiftedNum1);
+			if (bit1 == '1' || bit2 == '1') {
+				result.insert(0, '1');
+			} else {
+				result.insert(0, '0');
 			}
 		}
-		return result;
 
+		return new Binary(result.toString());
+	}
+
+	// AND Operation
+	/**
+	 * ANDing two binary variables.
+	 *
+	 * @param num1 The first  object
+	 * @param num2 The second  object
+	 * @return A binary variable with a value of <i>num1 AND num2</i>.
+	 */
+	public static Binary and(Binary num1, Binary num2) {
+		int maxLength = Math.max(num1.number.length(), num2.number.length());
+		StringBuilder result = new StringBuilder();
+
+		for (int i = 0; i < maxLength; i++) {
+			char bit1 = '0';
+			if (i < num1.number.length()) {
+				bit1 = num1.number.charAt(num1.number.length() - 1 - i);
+			}
+
+			char bit2 = '0';
+			if (i < num2.number.length()) {
+				bit2 = num2.number.charAt(num2.number.length() - 1 - i);
+			}
+
+			if (bit1 == '1' && bit2 == '1') {
+				result.insert(0, '1');
+			} else {
+				result.insert(0, '0');
+			}
+		}
+
+		return new Binary(result.toString());
+	}
+
+	// Multiply Operation
+	/**
+	 * Multiplying two binary variables. For more information, visit <a href="https://www.wikihow.com/Multiply-Mixed-Numbers"> Multiply-Mixed-Numbers </a>.
+	 *
+	 * @param num1 The first multiplier object
+	 * @param num2 The second multiplier object
+	 * @return A binary variable with a value of <i>num1*num2</i>.
+	 */
+	public static Binary multiply(Binary num1, Binary num2) {
+		Binary result = new Binary("0");
+
+		for (int i = 0; i < num2.number.length(); i++) {
+			if (num2.number.charAt(num2.number.length() - 1 - i) == '1') {
+				Binary shifted = new Binary(num1.number + "0".repeat(i));
+				result = Binary.add(result, shifted);
+			}
+		}
+
+		return result;
 	}
 }
 
